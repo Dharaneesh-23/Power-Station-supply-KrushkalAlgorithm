@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Coimbatore Power Locations</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css" />
+  <style>
+    #map {
+      height: 680px;
+    }
+    
+    .leaflet-bottom-right {
+      right: 10px;
+      bottom: 10px;
+      position: absolute;
+    }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+  <button onclick="hidePolylines()">Hide Polylines</button>
+  <button onclick="showNextPolyline()">Next</button>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
+  <script>
+    // Define the map container
+    var map = L.map('map').setView([11.0, 76.98], 12); // Adjust the center and zoom level as needed
+
+    // Add the OpenStreetMap tiles
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 18,
+      attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    // Define the locations array
+    var locations = [
+      { name: "Ukkadam Power Sub Station", coordinates: [10.989279758029435, 76.96729690282424] },
+      { name: "Arya Hitech Energies", coordinates: [11.013456120781987, 76.96026535893655] },
+      { name: "Coimbatore Airport", coordinates: [11.02913679355298, 77.0394307409098] },
+      { name: "Solar Power", coordinates: [10.986117863220867, 76.97060193074871] },
+      { name: "Dhavamani", coordinates: [11.02589414710022, 76.96702518472652] },
+      { name: "Hykan Power Nation", coordinates: [11.052402716273248, 76.94708824793571] },
+      { name: "Hindustan Solar Plant", coordinates: [11.030641302586412, 77.00925592705617] },
+      { name: "Puneet Syntex Power Plant", coordinates: [10.949495139217783, 76.98491012890246] },
+      { name: "Harsaa Power Plant", coordinates: [11.022213404111124, 76.999146511715444] },
+      { name: "Yuvraj Energy", coordinates: [11.023844333754022, 77.00461417415387] },
+      { name: "Essar Power Services", coordinates: [11.018886655212379, 76.95778968714339] },
+      { name: "CCMC Solar Park", coordinates: [10.983825684458296, 76.97098466143015] },
+      { name: "KCT Power House", coordinates: [11.078132849462257, 76.9869742865728] },
+      { name: "TNEB Thudiyalur", coordinates: [11.084960459504103, 76.93693135589136] },
+      { name: "Sulur Power Station", coordinates: [11.025734623592735, 77.11382027918773] }
+    ];
+   // var startpoly = ["TNEB Thudiyalur","Hykan Power Nation","Arya Hitech Energies","Essar Power Services","KCT Power House","Hindustan Solar Plant","Dhavamani","CCMC Solar Park","Harsaa Power Plant","Coimbatore Airport","Puneet Syntex Power Plant","Solar Power","Yuvraj Energy","Ukkadam Power Sub Station"];
+   // var endpoly = ["Sulur Power Station","Harsaa Power Plant","Dhavamani","TNEB Thudiyalur","Sulur Power Station","Yuvraj Energy","Puneet Syntex Power Plant","TNEB Thudiyalur","KCT Power House","Hykan Power Nation","Essar Power Services","Hindustan Solar Plant","KCT Power House","Solar Power"];
+    // Loop through the locations array and add markers to the map
+    var startpoly = [13,5,1,10,12,6,4,11,8,2,7,3,9,0];
+    var endpoly = [14,8,4,13,14,9,7,13,12,5,10,6,12,3];
+    locations.forEach(function(location) {
+      var marker = L.marker(location.coordinates).addTo(map);
+      marker.bindPopup(location.name);
+    });
+
+    // Create an array of polylines with different colors
+    var polylines = [];
+    var colors = ['red', 'blue', 'green', 'orange', 'purple', 'yellow', 'brown', 'pink', 'gray', 'violet', 'cyan', 'magenta', 'lime', 'teal', 'olive'];
+    for (var i = 0; i < locations.length - 1; i++) {
+      var coordinates = [locations[startpoly[i]].coordinates, locations[endpoly[i]].coordinates];
+      var color = colors[i % colors.length];
+      var polyline = L.polyline(coordinates, { color: color }).addTo(map);
+      polylines.push(polyline);
+    }
+
+    var currentPolylineIndex = 0;
+
+    // Function to hide polylines
+    function hidePolylines() {
+      polylines.forEach(function(polyline) {
+        map.removeLayer(polyline);
+      });
+    }
+
+    // Function to show next polyline
+    function showNextPolyline() {
+      if (currentPolylineIndex < polylines.length) {
+        polylines[currentPolylineIndex].addTo(map);
+        currentPolylineIndex++;
+      }
+    }
+  </script>
+</body>
+</html>
